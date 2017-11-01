@@ -41,8 +41,16 @@ namespace CustomRoyaleService.Controllers
         [HttpPost]
         public IHttpActionResult RegisterGameMode([FromBody] GameMode mode)
         {
-            _gameModeService.Register(mode);
-            return Ok();
+            try
+            {
+                _gameModeService.Register(mode);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
         }
     }
 }

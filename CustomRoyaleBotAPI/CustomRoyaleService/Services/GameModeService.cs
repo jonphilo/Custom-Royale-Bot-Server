@@ -14,7 +14,7 @@ namespace CustomRoyaleService.Services
         {
             using (var ctx = new CustomRoyaleContext())
             {
-                return ctx.GameModes as IEnumerable<GameMode>;
+                return ctx.GameModes.ToList();
             }
         }
 
@@ -23,9 +23,13 @@ namespace CustomRoyaleService.Services
             using (var ctx = new CustomRoyaleContext())
             {
                 int totalGameModes = ctx.GameModes.Count();
+                if (totalGameModes == 0)
+                {
+                    return null;
+                }
                 Random random = new Random();
-                int index = random.Next(0, totalGameModes - 1);
-                return ctx.GameModes.ElementAt(index);
+                int index = random.Next(0, totalGameModes);
+                return ctx.GameModes.ToList()[index];
             }
         }
 
@@ -33,6 +37,10 @@ namespace CustomRoyaleService.Services
         {
             using (var ctx = new CustomRoyaleContext())
             {
+                if (ctx.GameModes.Where(gm => gm.Name.Equals(gameMode.Name)).Any())
+                {
+                    throw new ArgumentException("Duplicate Game Mode");
+                }
                 ctx.GameModes.Add(gameMode);
                 ctx.SaveChanges();
             }
