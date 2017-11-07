@@ -10,6 +10,7 @@ namespace CustomRoyaleService.Data
 {
     public class CustomRoyaleContext : DbContext
     {
+        public DbSet<Game> Games { get; set; }
         public DbSet<GameMode> GameModes { get; set; }
     }
 }
